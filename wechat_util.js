@@ -14,22 +14,6 @@ export default {
     }
     return nonces.join('');
   },
-
-  /**
-   * Translate object to url parameters
-   *
-   * @param params
-   * @returns {string}
-   */
-  toParam: function (params) {
-    params = params || {};
-    var keys = [];
-    for (var k in params) {
-      keys.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
-    }
-    return keys.join('&');
-  },
-
   /**
    * Marshalling object keys to be sorted alphabetically and then translated to url parameters
    *

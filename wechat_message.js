@@ -43,10 +43,3 @@ export default function WechatMessage(appID, appSecret) {
     secret: appSecret
   }
 }
-
-var setting = Meteor.settings.private;
-if (setting && setting.wechat_mp) {
-  WechatMessage = new WechatMessage(setting.wechat_mp.appID, setting.wechat_mp.appSecret);
-} else {
-  console.log('error', 'Please Add wechat-mp setting.');
-}

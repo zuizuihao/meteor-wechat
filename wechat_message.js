@@ -4,9 +4,16 @@
 import wechatAuth from "./wechat_auth.js";
 import wechatSettings from "./wechat_settings.js";
 
-WechatMessage.prototype.send = function (to, templateId, link, data, cb) {
+var setting = Meteor.settings.private.wechat_mp;
+if (!setting) {
+  console.log('error', 'Please Add amap setting.');
+}
+
+WechatMessage = {};
+
+WechatMessage.send = function (to, templateId, link, data, cb) {
   var url = 'https://api.weixin.qq.com/cgi-bin/message/template/send';
-  this.sendRequest(this.app, url, {
+  WechatMessage.sendRequest(setting, url, {
     touser: to,
     template_id: templateId,
     url: link,
@@ -14,7 +21,7 @@ WechatMessage.prototype.send = function (to, templateId, link, data, cb) {
   }, cb);
 }
 
-WechatMessage.prototype.sendRequest = function (app ,url, data, cb) {
+WechatMessage.sendRequest = function (app, url, data, cb) {
   wechatAuth.determine(app, function () {
     wechatSettings.get(app.id, 'auth', function (authData) {
       var response = HTTP.post(url, {
@@ -35,11 +42,4 @@ WechatMessage.prototype.sendRequest = function (app ,url, data, cb) {
       }
     });
   });
-}
-
-export default function WechatMessage(appID, appSecret) {
-  this.app = {
-    id: appID,
-    secret: appSecret
-  }
 }

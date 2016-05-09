@@ -14,7 +14,8 @@ Package.onUse(function(api) {
   api.versionsFrom('1.3.2.4');
   api.use('ecmascript');
   api.use('http');
-  api.mainModule('wechat-mp.js', 'server');
+  api.export('WechatMessage', 'server');
+  api.addFiles('wechat_message.js', 'server');
 });
 
 Package.onTest(function(api) {

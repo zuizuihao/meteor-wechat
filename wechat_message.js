@@ -32,14 +32,7 @@ WechatMessage.sendRequest = function (app, url, data, cb) {
           access_token: authData.accessToken,
         },
         data: data
-      });
-
-      response = JSON.parse(response.content);
-      if (response.errcode) {
-        throw new Error("Failed to complete sendding wechat message. " + JSON.stringify(response));
-      } else {
-        return response;
-      }
+      }, cb);
     });
   });
 }

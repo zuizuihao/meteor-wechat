@@ -33,9 +33,7 @@ export default {
       }
       auth.lastTime = now;
       wechatSettings.set(app.id, 'auth', auth, function () {
-        self.tokenize(app, function () {
-          cb(false);
-        });
+        self.tokenize(app, cb);
       });
     });
   },
@@ -57,9 +55,7 @@ export default {
           auth = {};
         }
         auth.accessToken = json.access_token;
-        wechatSettings.set(app.id, 'auth', auth, function () {
-          cb(error, json);
-        });
+        wechatSettings.set(app.id, 'auth', auth, cb);
       });
     });
   }

@@ -48,5 +48,13 @@ export default {
     }
     lines.push('</xml>');
     return lines.join('');
+  },
+  toParam: function (params) {
+    params = params || {};
+    var keys = [];
+    for (var k in params) {
+      keys.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
+    }
+    return keys.join('&');
   }
 };

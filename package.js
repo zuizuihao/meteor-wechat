@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'roadshr:wechat-mp',
+  name: 'roadshr:wechat',
   version: '0.0.1',
   // Brief, one-line summary of the package.
   summary: '',
@@ -10,15 +10,19 @@ Package.describe({
   documentation: 'README.md'
 });
 
-Package.onUse(function(api) {
+Package.onUse(function (api) {
   api.versionsFrom('1.3.2.4');
   api.use('ecmascript');
   api.use('http');
   api.export('WechatMessage', 'server');
+  api.export('WechatJSSDK', 'server');
+  api.export('WechatOAuth', 'server');
   api.addFiles('wechat_message.js', 'server');
+  api.addFiles('wechat_jssdk.js', 'server');
+  api.addFiles('wechat_oauth.js', 'server');
 });
 
-Package.onTest(function(api) {
+Package.onTest(function (api) {
   api.use('ecmascript');
   api.use('tinytest');
   api.use('http');

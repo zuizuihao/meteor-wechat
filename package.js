@@ -17,9 +17,11 @@ Package.onUse(function (api) {
   api.export('WechatMessage', 'server');
   api.export('WechatJSSDK', 'server');
   api.export('WechatOAuth', 'server');
+  api.export('WechatAuth', 'server');
   api.addFiles('wechat_message.js', 'server');
   api.addFiles('wechat_jssdk.js', 'server');
   api.addFiles('wechat_oauth.js', 'server');
+  api.addFiles('wechat_auth.js', 'server');
 });
 
 Package.onTest(function (api) {

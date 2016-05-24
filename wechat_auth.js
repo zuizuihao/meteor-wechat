@@ -2,7 +2,7 @@
 const crypto = require('crypto');
 import wechatSettings from "./wechat_settings.js";
 
-export default {
+WechatAuth = {
   ACCESS_TOKEN_EXP: 7200 * 1000,
   generateSignature: function (token, timestamp, nonce) {
     var mixes = [token, timestamp, nonce];
@@ -55,8 +55,11 @@ export default {
           auth = {};
         }
         auth.accessToken = json.access_token;
-        wechatSettings.set(app.id, 'auth', auth, cb);
+        cb('', auth.accessToken);
+        wechatSettings.set(app.id, 'auth', auth, () => { });
       });
     });
   }
 };
+
+export default WechatAuth

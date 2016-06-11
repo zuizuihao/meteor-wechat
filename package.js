@@ -8,26 +8,28 @@ Package.describe({
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
-});
+})
 
 Package.onUse(function (api) {
-  api.versionsFrom('1.3.2.4');
-  api.use('ecmascript');
-  api.use('http');
-  api.export('WechatMessage', 'server');
-  api.export('WechatJSSDK', 'server');
-  api.export('WechatOAuth', 'server');
-  api.export('WechatAuth', 'server');
-  api.addFiles('wechat_message.js', 'server');
-  api.addFiles('wechat_jssdk.js', 'server');
-  api.addFiles('wechat_oauth.js', 'server');
-  api.addFiles('wechat_auth.js', 'server');
-});
+  api.versionsFrom('1.3.2.4')
+  api.use('ecmascript')
+  api.use('http')
+  api.export('WechatMessage', 'server')
+  api.export('WechatJSSDK', 'server')
+  api.export('WechatOAuth', 'server')
+  api.export('WechatAuth', 'server')
+  api.export('WechatCS', 'server')
+  api.addFiles('wechat_message.js', 'server')
+  api.addFiles('wechat_jssdk.js', 'server')
+  api.addFiles('wechat_oauth.js', 'server')
+  api.addFiles('wechat_auth.js', 'server')
+  api.addFiles('wechat_cs.js', 'server')
+})
 
 Package.onTest(function (api) {
-  api.use('ecmascript');
-  api.use('tinytest');
-  api.use('http');
-  api.use('roadshr:wechat-mp', 'server');
-  api.mainModule('wechat-mp-tests.js', 'server');
-});
+  api.use('ecmascript')
+  api.use('tinytest')
+  api.use('http')
+  api.use('roadshr:wechat-mp', 'server')
+  api.mainModule('wechat-mp-tests.js', 'server')
+})

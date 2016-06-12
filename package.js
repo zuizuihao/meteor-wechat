@@ -19,11 +19,13 @@ Package.onUse(function (api) {
   api.export('WechatOAuth', 'server')
   api.export('WechatAuth', 'server')
   api.export('WechatCS', 'server')
+  api.export('WechatUser', 'server')
   api.addFiles('wechat_message.js', 'server')
   api.addFiles('wechat_jssdk.js', 'server')
   api.addFiles('wechat_oauth.js', 'server')
   api.addFiles('wechat_auth.js', 'server')
   api.addFiles('wechat_cs.js', 'server')
+  api.addFiles('wechat_user.js', 'server')
 })
 
 Package.onTest(function (api) {

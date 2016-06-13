@@ -5,7 +5,7 @@ import utils from './wechat_util.js';
 
 const app = Meteor.settings.private.wechat_mp;
 if (!app) {
-  console.log('error', 'Please Add amap setting.');
+  console.log('error', 'Please Add wechat_mp setting.');
 }
 
 WechatJSSDK = {};

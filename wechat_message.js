@@ -6,7 +6,7 @@ import wechatSettings from "./wechat_settings.js";
 
 var setting = Meteor.settings.private.wechat_mp;
 if (!setting) {
-  console.log('error', 'Please Add amap setting.');
+  console.log('error', 'Please Add wechat_mp setting.');
 }
 
 WechatMessage = {};

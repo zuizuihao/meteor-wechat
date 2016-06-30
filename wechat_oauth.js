@@ -1,7 +1,7 @@
 // https://github.com/node-weixin/node-weixin-oauth
 import utils from './wechat_util.js'
 
-const app = Meteor.settings.private.wechat_mp
+const app = Meteor.settings.private.wechat_mp.app
 if (!app) {
   console.log('error', 'Please Add wechat_open setting.')
 }

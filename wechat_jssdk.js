@@ -3,7 +3,7 @@ import wechatAuth from "./wechat_auth.js";
 import wechatSettings from "./wechat_settings.js";
 import utils from './wechat_util.js';
 
-const app = Meteor.settings.private.wechat_mp;
+const app = Meteor.settings.private.wechat_mp.app;
 if (!app) {
   console.log('error', 'Please Add wechat_mp setting.');
 }
@@ -121,3 +121,5 @@ WechatJSSDK.generate = function (ticket, url) {
     url: url
   };
 }
+
+export default WechatJSSDK

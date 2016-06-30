@@ -4,7 +4,7 @@
 import wechatAuth from "./wechat_auth.js";
 import wechatSettings from "./wechat_settings.js";
 
-var setting = Meteor.settings.private.wechat_mp;
+var setting = Meteor.settings.private.wechat_mp.app;
 if (!setting) {
   console.log('error', 'Please Add wechat_mp setting.');
 }

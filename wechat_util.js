@@ -1,18 +1,18 @@
-//https://github.com/node-weixin/node-weixin-util
+// https://github.com/node-weixin/node-weixin-util
 
-const crypto = require('validator');
+const crypto = require('validator')
 
 export default {
   getNonce: function (length) {
-    length = length || 32;
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var pos = chars.length;
-    var nonces = [];
-    var i;
+    length = length || 32
+    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var pos = chars.length
+    var nonces = []
+    var i
     for (i = 0; i < length; i++) {
-      nonces.push(chars.charAt(Math.floor(Math.random() * pos)));
+      nonces.push(chars.charAt(Math.floor(Math.random() * pos)))
     }
-    return nonces.join('');
+    return nonces.join('')
   },
   /**
    * Marshalling object keys to be sorted alphabetically and then translated to url parameters
@@ -21,40 +21,44 @@ export default {
    * @returns {string}
    */
   marshall: function (params) {
-    params = params || {};
-    var keys = Object.keys(params).sort();
-    var obj = {}, kvs = [];
+    params = params || {}
+    var keys = Object.keys(params).sort()
+    var obj = {}, kvs = []
     for (var i = 0; i < keys.length; i++) {
-      var k = keys[i];
+      var k = keys[i]
       if (params[k]) {
-        obj[k] = params[k];
-        kvs.push(keys[i] + '=' + params[k]);
+        obj[k] = params[k]
+        kvs.push(keys[i] + '=' + params[k])
       }
     }
-    return kvs.join('&');
+    return kvs.join('&')
   },
   toXml: function (params) {
-    var lines = [];
-    lines.push('<xml>');
+    var lines = []
+    lines.push('<xml>')
     for (var k in params) {
       if (!params[k]) {
-        continue;
+        continue
       }
-      if (validator.isNumeric(params[k]) || validator.isFloat(params[k])) {
-        lines.push('<' + k + '>' + params[k] + '</' + k + '>');
+      if (isNumeric(params[k])) {
+        lines.push('<' + k + '>' + params[k] + '</' + k + '>')
       } else {
-        lines.push('<' + k + '><![CDATA[' + params[k] + ']]></' + k + '>');
+        lines.push('<' + k + '><![CDATA[' + params[k] + ']]></' + k + '>')
       }
     }
-    lines.push('</xml>');
-    return lines.join('');
+    lines.push('</xml>')
+    return lines.join('')
   },
   toParam: function (params) {
-    params = params || {};
-    var keys = [];
+    params = params || {}
+    var keys = []
     for (var k in params) {
-      keys.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
+      keys.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
     }
-    return keys.join('&');
+    return keys.join('&')
   }
-};
+}
+
+function isNumeric (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n)
+}

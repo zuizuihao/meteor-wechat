@@ -379,7 +379,7 @@
     "xml": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/xml/-/xml-1.0.1.tgz",
-      "from": "https://registry.npmjs.org/xml/-/xml-1.0.1.tgz"
+      "from": "xml@1.0.1"
     },
     "xml2js": {
       "version": "0.4.16",

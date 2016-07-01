@@ -1,4 +1,4 @@
-// https://github.com/node-weixin/node-weixin-jssdk
+// https://github.com/node-weixin/node-weixin-pay
 import wechatAuth from './wechat_auth.js'
 import wechatSettings from './wechat_settings.js'
 import utils from './wechat_util.js'
@@ -27,11 +27,20 @@ WechatPay.init = function (pfx) {
   }
 }
 
-WechatPay.unified = function (data, cb) {
+WechatPay.unified = function (data, callback) {
   data.device_info = 'WEB'
   data.trade_type = 'JSAPI'
 
-  pay.request('https://api.mch.weixin.qq.com/pay/unifiedorder', data, cb)
+  pay.request('https://api.mch.weixin.qq.com/pay/unifiedorder', data, (error, result) => {
+      if (error) {
+        if (callback)
+          callback(error, result)
+        return
+      }
+      var ret = pay.prepay(config.app, config.merchant, result.prepay_id);
+      if (callback)
+          callback(null, ret)
+    })
 }
 
 WechatPay.query = function (data, cb) {
@@ -75,24 +84,15 @@ var pay = {
    * @param certificate         Certificate from Tencent Pay
    * @param cb                  Callback Function
    */
-  request: function (url, data, callback) {
+  request: function (url, data, cb) {
     var error = {}
 
     var params = _.clone(data)
-    params = pay.prepare(config.app, config.merchant, params)
+    params = pay.prepare(config.app, config.merchant, params);
     var sign = pay.sign(config.merchant, params)
     params.sign = sign
     var xml = utils.toXml(params)
-    wechatRequest.xmlssl(url, xml, config.certificate, (error, result) => {
-      if (error) {
-        if (callback)
-          callback(error, result)
-        return
-      }
-      var data = pay.prepay(config.app, config.merchant, result.prepay_id);
-      if (callback)
-          callback(null, data)
-    })
+    wechatRequest.xmlssl(url, xml, config.certificate, cb)
   },
 
   /**

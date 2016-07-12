@@ -1,6 +1,5 @@
 // https://github.com/node-weixin/node-weixin-pay
 import wechatAuth from './wechat_auth.js'
-import wechatSettings from './wechat_settings.js'
 import utils from './wechat_util.js'
 import wechatRequest from './wechat_request.js'
 

@@ -29,17 +29,38 @@ WechatPay.init = function (pfx) {
 WechatPay.unified = function (data, callback) {
   data.device_info = 'WEB'
   data.trade_type = 'JSAPI'
+  data.appid = config.app.id
+  /* eslint camelcase: [2, {properties: "never"}] */
+  data.mch_id = config.merchant.id
 
   pay.request('https://api.mch.weixin.qq.com/pay/unifiedorder', data, (error, result) => {
-      if (error) {
-        if (callback)
-          callback(error, result)
-        return
-      }
-      var ret = pay.prepay(config.app, config.merchant, result.prepay_id);
+    if (error) {
       if (callback)
-          callback(null, ret)
-    })
+        callback(error, result)
+      return
+    }
+    var ret = pay.prepay(config.app, config.merchant, result.prepay_id);
+    if (callback)
+      callback(null, ret)
+  })
+}
+
+WechatPay.transfer = function (data, callback) {
+  //企业付款
+  data.mch_appid = config.app.id
+  data.mchid = config.merchant.id
+
+  pay.request('https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers', data, (error, result) => {
+    if (error) {
+      if (callback)
+        callback(error, result)
+      return
+    }
+    console.log(error);
+    console.log(result);
+    if (callback)
+      callback(null, result)
+  })
 }
 
 WechatPay.query = function (data, cb) {
@@ -85,33 +106,13 @@ var pay = {
    */
   request: function (url, data, cb) {
     var error = {}
-
     var params = _.clone(data)
-    params = pay.prepare(config.app, config.merchant, params);
+    params.nonce_str = utils.getNonce()
     var sign = pay.sign(config.merchant, params)
     params.sign = sign
+    console.log(params);
     var xml = utils.toXml(params)
     wechatRequest.xmlssl(url, xml, config.certificate, cb)
-  },
-
-  /**
-   * Prepare data with normal fields
-   *
-   * @param data
-   * @param app
-   * @param merchant
-   * @param device
-   * @returns {*}
-   */
-  prepare: function (app, merchant, data, device) {
-    data.appid = app.id
-    /* eslint camelcase: [2, {properties: "never"}] */
-    data.mch_id = merchant.id
-    if (device) {
-      data.device_info = device.info
-    }
-    data.nonce_str = utils.getNonce()
-    return data
   },
 
   /**

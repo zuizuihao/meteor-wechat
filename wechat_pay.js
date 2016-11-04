@@ -63,6 +63,24 @@ WechatPay.transfer = function (data, callback) {
   })
 }
 
+WechatPay.sendredpack = function (data, callback) {
+  //发送普通红包
+  data.wxappid = config.app.id
+  data.mch_id = config.merchant.id
+
+  pay.request('https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack', data, (error, result) => {
+    if (error) {
+      if (callback)
+        callback(error, result)
+      return
+    }
+    console.log(error);
+    console.log(result);
+    if (callback)
+      callback(null, result)
+  })
+}
+
 WechatPay.query = function (data, cb) {
   var url = 'https://api.mch.weixin.qq.com/pay/orderquery'
   pay.request(url, data, cb)

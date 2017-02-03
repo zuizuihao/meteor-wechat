@@ -28,6 +28,7 @@ Package.onUse(function (api) {
   api.export('WechatCS', 'server')
   api.export('WechatUser', 'server')
   api.export('WechatPay', 'server')
+  api.export('WechatMina', 'server')
   api.addFiles('wechat_message.js', 'server')
   api.addFiles('wechat_jssdk.js', 'server')
   api.addFiles('wechat_oauth.js', 'server')
@@ -35,6 +36,7 @@ Package.onUse(function (api) {
   api.addFiles('wechat_cs.js', 'server')
   api.addFiles('wechat_user.js', 'server')
   api.addFiles('wechat_pay.js', 'server')
+  api.addFiles('wechat_mina.js', 'server')
 })
 
 Package.onTest(function (api) {

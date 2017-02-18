@@ -4,16 +4,13 @@
 import wechatAuth from "./wechat_auth.js";
 import wechatSettings from "./wechat_settings.js";
 
-var setting = Meteor.settings.private.wechat_mp.app;
-if (!setting) {
-  console.log('error', 'Please Add wechat_mp setting.');
-}
+var {mp} = Meteor.settings.private.wechat;
 
 WechatMessage = {};
 
 WechatMessage.send = function (to, templateId, link, data, cb) {
   var url = 'https://api.weixin.qq.com/cgi-bin/message/template/send';
-  WechatMessage.sendRequest(setting, url, {
+  WechatMessage.sendRequest(mp, url, {
     touser: to,
     template_id: templateId,
     url: link,

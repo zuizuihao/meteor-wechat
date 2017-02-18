@@ -1,13 +1,10 @@
 // https://github.com/node-weixin/node-weixin-settings
 
-const app = Meteor.settings.private.wechat_mp
-if (!app) {
-  console.log('error', 'Please Add wechat setting.')
-}
+const {setting_url} = Meteor.settings.private.wechat
 
 export default {
   get: function (id, key, cb) {
-    HTTP.get(app.setting_url + 'get', {
+    HTTP.get(setting_url + 'get', {
       params: {
         id: id,
         key: key
@@ -21,7 +18,7 @@ export default {
     })
   },
   set: function (id, key, value, cb) {
-    HTTP.post(app.setting_url + 'set', {
+    HTTP.post(setting_url + 'set', {
       data: {
         id: id,
         key: key,

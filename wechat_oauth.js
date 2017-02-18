@@ -1,15 +1,7 @@
 // https://github.com/node-weixin/node-weixin-oauth
 import utils from './wechat_util.js'
 
-const app = Meteor.settings.private.wechat_mp.app
-if (!app) {
-  console.log('error', 'Please Add wechat_open setting.')
-}
-
-const web = Meteor.settings.private.wechat_open
-if (!web) {
-  console.log('error', 'Please Add wechat_open setting.')
-}
+const {app, work, web} = Meteor.settings.private.wechat
 
 WechatOAuth = {}
 
@@ -22,6 +14,20 @@ WechatOAuth.createMobileURL = function (redirectUri, state, scope, type) {
   var oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
   var params = {
     appid: app.id,
+    redirect_uri: redirectUri,
+    // Only on type currently
+    response_type: ['code'][type],
+    scope: ['snsapi_base', 'snsapi_userinfo'][scope],
+    state: state
+  }
+  return oauthUrl + '?' + utils.toParam(params) + '#wechat_redirect'
+}
+
+WechatOAuth.createWorkURL = function (redirectUri, state, scope, type) {
+  type = 0
+  var oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
+  var params = {
+    appid: work.id,
     redirect_uri: redirectUri,
     // Only on type currently
     response_type: ['code'][type],
@@ -50,6 +56,10 @@ WechatOAuth.getMobileToken = function (query) {
 
 WechatOAuth.getWebToken = function (query) {
   return WechatOAuth.getTokenResponse(web, query)
+}
+
+WechatOAuth.getWorkToken = function (query) {
+  return WechatOAuth.getTokenResponse(work, query)
 }
 
 WechatOAuth.getTokenResponse = function (app, query) {

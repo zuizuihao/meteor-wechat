@@ -4,15 +4,15 @@
 import wechatAuth from './wechat_auth.js'
 import wechatSettings from './wechat_settings.js'
 
-var setting = Meteor.settings.private.wechat_mp.app
-if (!setting) {
+var {mp} = Meteor.settings.private.wechat
+if (!mp) {
   console.log('error', 'Please Add wechat_mp setting.')
 }
 
 WechatUser = {}
 
 WechatUser.getOpenIdList = function (next_openid, cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.get('https://api.weixin.qq.com/cgi-bin/user/get', {
       headers: {
         Accept: 'application/json'
@@ -26,7 +26,7 @@ WechatUser.getOpenIdList = function (next_openid, cb) {
 }
 
 WechatUser.getUserInfo = function (openid, cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.get('https://api.weixin.qq.com/cgi-bin/user/info', {
       headers: {
         Accept: 'application/json'
@@ -47,7 +47,7 @@ WechatUser.getUserInfoList = function (openIdList, cb) {
     })
   }, this)
 
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.post('https://api.weixin.qq.com/cgi-bin/user/info/batchget', {
       headers: {
         Accept: 'application/json'

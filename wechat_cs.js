@@ -4,15 +4,12 @@
 import wechatAuth from './wechat_auth.js'
 import wechatSettings from './wechat_settings.js'
 
-var setting = Meteor.settings.private.wechat_mp.app
-if (!setting) {
-  console.log('error', 'Please Add wechat_mp setting.')
-}
+var {mp} = Meteor.settings.private.wechat
 
 WechatCS = {}
 
 WechatCS.getkflist = function (cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.get('https://api.weixin.qq.com/cgi-bin/customservice/getkflist', {
       headers: {
         Accept: 'application/json'
@@ -25,7 +22,7 @@ WechatCS.getkflist = function (cb) {
 }
 
 WechatCS.getonlinekflist = function (cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.get('https://api.weixin.qq.com/cgi-bin/customservice/getonlinekflist', {
       headers: {
         Accept: 'application/json'
@@ -38,7 +35,7 @@ WechatCS.getonlinekflist = function (cb) {
 }
 
 WechatCS.add = function (accountName, nickname, password, cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.post('https://api.weixin.qq.com/customservice/kfaccount/add', {
       headers: {
         Accept: 'application/json'
@@ -56,7 +53,7 @@ WechatCS.add = function (accountName, nickname, password, cb) {
 }
 
 WechatCS.update = function (accountName, nickname, password, cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.post('https://api.weixin.qq.com/customservice/kfaccount/update', {
       headers: {
         Accept: 'application/json'
@@ -74,7 +71,7 @@ WechatCS.update = function (accountName, nickname, password, cb) {
 }
 
 WechatCS.del = function (kf_account, cb) {
-  wechatAuth.getToken(setting, (error, access_token) => {
+  wechatAuth.getToken(mp, (error, access_token) => {
     HTTP.post('https://api.weixin.qq.com/customservice/kfaccount/del', {
       headers: {
         Accept: 'application/json'

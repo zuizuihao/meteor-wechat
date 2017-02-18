@@ -5,7 +5,7 @@ import wechatRequest from './wechat_request.js'
 
 var xml = require('xml')
 
-const config = Meteor.settings.private.wechat_mp
+const config = Meteor.settings.private.wechat
 if (!config) {
   console.log('error', 'Please Add wechat_open setting.')
 }

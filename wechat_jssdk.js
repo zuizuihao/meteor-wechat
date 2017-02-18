@@ -3,10 +3,7 @@ import wechatAuth from "./wechat_auth.js";
 import wechatSettings from "./wechat_settings.js";
 import utils from './wechat_util.js';
 
-const app = Meteor.settings.private.wechat_mp.app;
-if (!app) {
-  console.log('error', 'Please Add wechat_mp setting.');
-}
+const {mp} = Meteor.settings.private.wechat
 
 WechatJSSDK = {};
 
@@ -25,11 +22,11 @@ if (Meteor.release)
  * @param cb
  */
 WechatJSSDK.prepare = function (url, cb) {
-  wechatAuth.determine(app, function () {
+  wechatAuth.determine(mp, function () {
     WechatJSSDK.signify(url, function (error, json) {
       if (!error && !json.errcode) {
         cb(false, {
-          appId: app.id,
+          appId: mp.id,
           signature: json.signature,
           nonceStr: json.noncestr,
           timestamp: json.timestamp,
@@ -65,7 +62,7 @@ WechatJSSDK.signify = function (url, cb) {
 }
 
 WechatJSSDK.getTicket = function (cb) {
-  wechatSettings.get(app.id, 'jssdk', function (jssdk) {
+  wechatSettings.get(mp.id, 'jssdk', function (jssdk) {
     if (!jssdk) {
       jssdk = {};
     }
@@ -77,8 +74,8 @@ WechatJSSDK.getTicket = function (cb) {
       return;
     }
     jssdk.lastTime = now;
-    wechatSettings.get(app.id, 'auth', function (authData) {
-      wechatSettings.set(app.id, 'jssdk', jssdk, function () {
+    wechatSettings.get(mp.id, 'auth', function (authData) {
+      wechatSettings.set(mp.id, 'jssdk', jssdk, function () {
         HTTP.get(baseUrl + 'getticket', {
           params: {
             type: 'jsapi',
@@ -92,7 +89,7 @@ WechatJSSDK.getTicket = function (cb) {
           }
           var json = JSON.parse(response.content);
           jssdk.ticket = json.ticket;
-          wechatSettings.set(app.id, 'jssdk', jssdk, function () {
+          wechatSettings.set(mp.id, 'jssdk', jssdk, function () {
             cb(false, json.ticket);
           });
         });

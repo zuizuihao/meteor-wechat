@@ -1,19 +1,19 @@
 // https://github.com/node-weixin/node-weixin-oauth
 import utils from './wechat_util.js'
 
-const {app, work, web} = Meteor.settings.private.wechat
+const {work} = Meteor.settings.private.wechat
 
-WechatOAuth = {}
+WechatWork = {}
 
 var userAgent = 'Meteor'
 if (Meteor.release)
   userAgent += '/' + Meteor.release
 
-WechatOAuth.createMobileURL = function (redirectUri, state, scope, type) {
+WechatWork.createWorkURL = function (redirectUri, state, scope, type) {
   type = 0
   var oauthUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize'
   var params = {
-    appid: app.id,
+    appid: work.id,
     redirect_uri: redirectUri,
     // Only on type currently
     response_type: ['code'][type],
@@ -23,36 +23,21 @@ WechatOAuth.createMobileURL = function (redirectUri, state, scope, type) {
   return oauthUrl + '?' + utils.toParam(params) + '#wechat_redirect'
 }
 
-WechatOAuth.createWebURL = function (redirectUri, state) {
-  type = 0
-  var oauthUrl = 'https://open.weixin.qq.com/connect/qrconnect'
-  var params = {
-    appid: web.id,
-    redirect_uri: redirectUri,
-    response_type: 'code',
-    scope: 'snsapi_login',
-    state: state
-  }
-  return oauthUrl + '?' + utils.toParam(params) + '#wechat_redirect'
+WechatWork.getWorkToken = function () {
+  return WechatWork.getWorkTokenResponse(work)
 }
 
-WechatOAuth.getMobileToken = function (query) {
-  return WechatOAuth.getTokenResponse(app, query)
-}
-
-WechatOAuth.getTokenResponse = function (app, query) {
+WechatWork.getWorkTokenResponse = function (app) {
   var response
   try {
-    response = HTTP.post('https://api.weixin.qq.com/sns/oauth2/access_token', {
+    response = HTTP.get('https://qyapi.weixin.qq.com/cgi-bin/gettoken', {
       headers: {
         Accept: 'application/json',
         'User-Agent': userAgent
       },
       params: {
-        code: query.code,
-        appid: app.id,
-        secret: app.secret,
-        grant_type: 'authorization_code'
+        corpid: app.id,
+        corpsecret: app.secret
       }
     })
   } catch (err) {
@@ -69,17 +54,44 @@ WechatOAuth.getTokenResponse = function (app, query) {
   }
 }
 
-WechatOAuth.getUserInfo = function (access_token, openid) {
+WechatWork.getUserInfo = function (access_token, code) {
   var response
   try {
-    response = HTTP.get('https://api.weixin.qq.com/sns/userinfo', {
+    response = HTTP.get('https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo', {
       headers: {
         Accept: 'application/json',
         'User-Agent': userAgent
       },
       params: {
         access_token: access_token,
-        openid: openid
+        code: code
+      }
+    })
+  } catch (err) {
+    throw _.extend(new Error('Failed to complete OAuth handshake with Wechat. ' + err.message), {
+      response: err.response
+    })
+  }
+
+  response = JSON.parse(response.content)
+  if (response.errcode) {
+    throw new Error('Failed to complete OAuth handshake with Wechat. ' + response.errmsg)
+  } else {
+    return response
+  }
+}
+
+WechatWork.getUser = function (access_token, userid) {
+  var response
+  try {
+    response = HTTP.get('https://qyapi.weixin.qq.com/cgi-bin/user/get', {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': userAgent
+      },
+      params: {
+        access_token: access_token,
+        userid: userid
       }
     })
   } catch (err) {

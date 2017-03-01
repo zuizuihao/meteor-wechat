@@ -107,14 +107,13 @@ WechatWork = {
       }, callback)
     })
   },
-  getDepartmentUserList(department_id, callback) {
+  sendMessage(data, callback) {
     WechatWork.getToken(work, (error, access_token) => {
-      HTTP.get('https://qyapi.weixin.qq.com/cgi-bin/user/simplelist', {
+      HTTP.post('https://qyapi.weixin.qq.com/cgi-bin/message/send', {
         params: {
-          access_token: access_token,
-          department_id: department_id,
-          fetch_child: 1
-        }
+          access_token: access_token
+        },
+        data: data
       }, callback)
     })
   }

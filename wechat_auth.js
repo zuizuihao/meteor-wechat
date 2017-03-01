@@ -1,9 +1,9 @@
 // https://github.com/node-weixin/node-weixin-auth
 const crypto = require('crypto')
 import wechatSettings from './wechat_settings.js'
+import CONST from './const.js'
 
 WechatAuth = {
-  ACCESS_TOKEN_EXP: 7200 * 1000,
   generateSignature: function (token, timestamp, nonce) {
     var mixes = [token, timestamp, nonce]
     mixes.sort()
@@ -27,7 +27,7 @@ WechatAuth = {
         auth = {}
       }
 
-      if (auth.lastTime && ((now - auth.lastTime) < self.ACCESS_TOKEN_EXP)) {
+      if (auth.lastTime && ((now - auth.lastTime) < CONST.ACCESS_TOKEN_EXP)) {
         cb(true)
         return
       }
@@ -56,8 +56,7 @@ WechatAuth = {
         }
         auth.accessToken = json.access_token
         cb('', auth.accessToken)
-        wechatSettings.set(app.id, 'auth', auth, () => {
-        })
+        wechatSettings.set(app.id, 'auth', auth, () => {})
       })
     })
   },
